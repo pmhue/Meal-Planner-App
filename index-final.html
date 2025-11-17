@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="vi" id="app">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛒 Meal Planner Pro - Ứng Dụng Đi Chợ Thông Minh</title>
+  <meta name="description" content="Ứng dụng lập thực đơn và đi chợ thông minh cho gia đình Việt">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f4ff',
+              100: '#e0e7ff',
+              500: '#667eea',
+              600: '#5a67d8',
+              700: '#4c51bf',
+            },
+            accent: {
+              500: '#764ba2',
+              600: '#6b3f94',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    [x-cloak] { display: none !important; }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .hover-scale {
+      transition: transform 0.2s;
+    }
+
+    .hover-scale:hover {
+      transform: scale(1.02);
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dropdown menu */
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    /* Mobile menu */
+    #mobileMenu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    #mobileMenu.active {
+      transform: translateX(0);
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    body.dark-mode .bg-white {
+      background-color: #2d3748 !important;
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .text-gray-800 {
+      color: #e2e8f0 !important;
+    }
+
+    body.dark-mode .text-gray-700 {
+      color: #cbd5e0 !important;
+    }
+
+    body.dark-mode .text-gray-600 {
+      color: #a0aec0 !important;
+    }
+
+    body.dark-mode .border-gray-200 {
+      border-color: #4a5568 !important;
+    }
+
+    body.dark-mode .border-gray-300 {
+      border-color: #4a5568 !important;
+    }
+
+    body.dark-mode .bg-gray-50 {
+      background-color: #374151 !important;
+    }
+
+    body.dark-mode .bg-gray-100 {
+      background-color: #374151 !important;
+    }
+
+    body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
+      background-color: #374151 !important;
+      color: #e2e8f0 !important;
+      border-color: #4a5568 !important;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen font-sans">
+
+  <!-- Navigation Header -->
+  <header class="gradient-bg text-white shadow-xl sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between py-4">
+        <!-- Logo & Brand -->
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-shopping-cart text-3xl"></i>
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold">Meal Planner Pro</h1>
+            <p class="text-xs md:text-sm opacity-90">Lập thực đơn & Đi chợ thông minh</p>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#home" onclick="showSection('home')" class="nav-link hover:text-yellow-300 transition font-medium">
+            <i class="fas fa-home mr-1"></i> Trang chủ
+          </a>
+
+          <!-- Language Switcher -->
+          <div class="relative dropdown">
+            <button class="nav-link hover:text-yellow-300 transition font-medium flex items-center">
+              <i class="fas fa-language mr-1"></i>
+              <span id="currentLang">Tiếng Việt</span>
+              <i class="fas fa-chevron-down ml-1 text-xs"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-lg shadow-xl overflow-hidden">
+              <a href="#" onclick="switchLanguage('vi')" class="block px-4 py-2 hover:bg-primary-50 transition">
+                <i class="fas fa-flag mr-2"></i> Tiếng Việt
+              </a>
+              <a href="#" onclick="switchLanguage('en')" class="block px-4 py-2 hover:bg-primary-50 transition">
+                <i class="fas fa-flag mr-2"></i> English
+              </a>
+            </div>
+          </div>
+
+          <a href="#blog" onclick="showSection('blog')" class="nav-link hover:text-yellow-300 transition font-medium">
+            <i class="fas fa-blog mr-1"></i> Blog
+          </a>
+
+          <a href="#feedback" onclick="showSection('feedback')" class="nav-link hover:text-yellow-300 transition font-medium">
+            <i class="fas fa-comment-dots mr-1"></i> Góp ý
+          </a>
+
+          <a href="#about" onclick="showSection('about')" class="nav-link hover:text-yellow-300 transition font-medium">
+            <i class="fas fa-info-circle mr-1"></i> Giới thiệu
+          </a>
+
+          <!-- Dark Mode Toggle -->
+          <button onclick="toggleDarkMode()" class="nav-link hover:text-yellow-300 transition font-medium" title="Chuyển chế độ tối/sáng">
+            <i id="darkModeIcon" class="fas fa-moon mr-1"></i>
+            <span id="darkModeText">Tối</span>
+          </button>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="md:hidden text-2xl" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="fixed inset-y-0 right-0 w-64 gradient-bg text-white shadow-2xl md:hidden z-50">
+    <div class="p-6">
+      <button onclick="toggleMobileMenu()" class="absolute top-4 right-4 text-2xl">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <nav class="mt-12 space-y-4">
+        <a href="#home" onclick="showSection('home'); toggleMobileMenu()" class="block py-3 px-4 rounded hover:bg-white/20 transition">
+          <i class="fas fa-home mr-2"></i> Trang chủ
+        </a>
+        <div class="py-3 px-4">
+          <p class="text-sm opacity-75 mb-2"><i class="fas fa-language mr-2"></i> Ngôn ngữ</p>
+          <div class="ml-4 space-y-2">
+            <button onclick="switchLanguage('vi')" class="block w-full text-left py-2 px-3 rounded hover:bg-white/20">Tiếng Việt</button>
+            <button onclick="switchLanguage('en')" class="block w-full text-left py-2 px-3 rounded hover:bg-white/20">English</button>
+          </div>
+        </div>
+        <a href="#blog" onclick="showSection('blog'); toggleMobileMenu()" class="block py-3 px-4 rounded hover:bg-white/20 transition">
+          <i class="fas fa-blog mr-2"></i> Blog
+        </a>
+        <a href="#feedback" onclick="showSection('feedback'); toggleMobileMenu()" class="block py-3 px-4 rounded hover:bg-white/20 transition">
+          <i class="fas fa-comment-dots mr-2"></i> Góp ý
+        </a>
+        <a href="#about" onclick="showSection('about'); toggleMobileMenu()" class="block py-3 px-4 rounded hover:bg-white/20 transition">
+          <i class="fas fa-info-circle mr-2"></i> Giới thiệu
+        </a>
+        <button onclick="toggleDarkMode()" class="block w-full text-left py-3 px-4 rounded hover:bg-white/20 transition">
+          <i id="darkModeIconMobile" class="fas fa-moon mr-2"></i> <span id="darkModeTextMobile">Chế độ tối</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8">
+
+    <!-- HOME SECTION (Meal Planner - từ code cũ) -->
+    <div id="homeSection">
+      <!-- Step Indicator -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between max-w-4xl mx-auto">
+          <div class="flex-1">
+            <div class="flex items-center">
+              <div id="step1Indicator" class="w-10 h-10 rounded-full gradient-bg text-white flex items-center justify-center font-bold shadow-lg">1</div>
+              <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+            </div>
+            <p class="text-xs mt-2 text-gray-600 font-medium" data-lang-vi="Cài đặt" data-lang-en="Setup">Cài đặt</p>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center">
+              <div id="step2Indicator" class="w-10 h-10 rounded-full bg-gray-300 text-white flex items-center justify-center font-bold">2</div>
+              <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+            </div>
+            <p class="text-xs mt-2 text-gray-600 font-medium" data-lang-vi="Chọn món" data-lang-en="Select dishes">Chọn món</p>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center">
+              <div id="step3Indicator" class="w-10 h-10 rounded-full bg-gray-300 text-white flex items-center justify-center font-bold">3</div>
+            </div>
+            <p class="text-xs mt-2 text-gray-600 font-medium" data-lang-vi="Kết quả" data-lang-en="Results">Kết quả</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: Settings -->
+      <div id="step1" class="animate-fade-in">
+        <div class="max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+              <i class="fas fa-cog text-primary-500 mr-3"></i>
+              <span data-lang-vi="Bước 1: Cài đặt kế hoạch" data-lang-en="Step 1: Plan Settings">Bước 1: Cài đặt kế hoạch</span>
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Số người -->
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">
+                  <i class="fas fa-users text-primary-500 mr-2"></i>
+                  <span data-lang-vi="Số người ăn" data-lang-en="Number of people">Số người ăn</span>
+                </label>
+                <div class="grid grid-cols-4 gap-2">
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="1">1</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="2">2</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="3">3</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-primary-500 bg-primary-50 transition font-semibold" data-value="4">4</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="5">5</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="6">6</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="7">7</button>
+                  <button class="people-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="8">8</button>
+                </div>
+              </div>
+
+              <!-- Số ngày -->
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">
+                  <i class="fas fa-calendar-alt text-primary-500 mr-2"></i>
+                  <span data-lang-vi="Thời gian lập kế hoạch" data-lang-en="Planning period">Thời gian lập kế hoạch</span>
+                </label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button class="days-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="1" data-label-vi="1 ngày" data-label-en="1 day">1 ngày</button>
+                  <button class="days-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="3" data-label-vi="3 ngày" data-label-en="3 days">3 ngày</button>
+                  <button class="days-btn px-4 py-3 rounded-lg border-2 border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition font-semibold" data-value="5" data-label-vi="5 ngày" data-label-en="5 days">5 ngày</button>
+                  <button class="days-btn px-4 py-3 rounded-lg border-2 border-primary-500 bg-primary-50 transition font-semibold" data-value="7" data-label-vi="7 ngày" data-label-en="7 days">7 ngày</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chế độ -->
+            <div class="mt-6">
+              <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <i class="fas fa-magic text-primary-500 mr-2"></i>
+                <span data-lang-vi="Chế độ tạo thực đơn" data-lang-en="Meal planning mode">Chế độ tạo thực đơn</span>
+              </label>
+              <div class="grid md:grid-cols-3 gap-4">
+                <button id="modeAuto" class="mode-btn gradient-bg text-white p-6 rounded-xl hover:shadow-2xl transition" data-mode="auto">
+                  <i class="fas fa-robot text-3xl mb-3"></i>
+                  <h3 class="font-bold text-lg" data-lang-vi="Tự động" data-lang-en="Automatic">Tự động</h3>
+                  <p class="text-sm opacity-90 mt-2" data-lang-vi="Hệ thống gợi ý thực đơn cân bằng" data-lang-en="System suggests balanced menu">Hệ thống gợi ý thực đơn cân bằng</p>
+                </button>
+                <button id="modeManual" class="mode-btn bg-white border-2 border-gray-300 p-6 rounded-xl hover:border-primary-500 hover:shadow-xl transition" data-mode="manual">
+                  <i class="fas fa-hand-pointer text-3xl mb-3 text-gray-600"></i>
+                  <h3 class="font-bold text-lg text-gray-800" data-lang-vi="Tự chọn món" data-lang-en="Manual selection">Tự chọn món</h3>
+                  <p class="text-sm text-gray-600 mt-2" data-lang-vi="Chọn món ăn yêu thích" data-lang-en="Choose your favorite dishes">Chọn món ăn yêu thích</p>
+                </button>
+                <button id="modeByDay" class="mode-btn bg-white border-2 border-gray-300 p-6 rounded-xl hover:border-primary-500 hover:shadow-xl transition" data-mode="byday">
+                  <i class="fas fa-calendar-check text-3xl mb-3 text-gray-600"></i>
+                  <h3 class="font-bold text-lg text-gray-800" data-lang-vi="Theo ngày" data-lang-en="By day">Theo ngày</h3>
+                  <p class="text-sm text-gray-600 mt-2" data-lang-vi="Lên thực đơn từng ngày" data-lang-en="Plan day by day">Lên thực đơn từng ngày</p>
+                </button>
+              </div>
+            </div>
+
+            <!-- Next Button -->
+            <div class="mt-8 flex justify-end">
+              <button id="nextToStep2" class="gradient-bg text-white px-8 py-3 rounded-xl font-bold hover:shadow-2xl transition transform hover:scale-105">
+                <span data-lang-vi="Tiếp theo" data-lang-en="Next">Tiếp theo</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 & 3 sẽ được render bởi JavaScript -->
+      <div id="step2" class="hidden"></div>
+      <div id="step3" class="hidden"></div>
+
+    </div>
+
+    <!-- BLOG SECTION -->
+    <div id="blogSection" class="hidden animate-fade-in">
+      <div class="max-w-6xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="fas fa-blog text-primary-500 mr-3"></i>
+            <span data-lang-vi="Blog Ẩm Thực" data-lang-en="Food Blog">Blog Ẩm Thực</span>
+          </h2>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <!-- Blog Post 1 -->
+            <div class="border rounded-lg overflow-hidden hover:shadow-xl transition">
+              <img src="https://via.placeholder.com/400x250/667eea/ffffff?text=Meal+Planning+Tips" alt="Blog" class="w-full h-48 object-cover">
+              <div class="p-6">
+                <h3 class="font-bold text-lg mb-2">10 Mẹo Lập Thực Đơn Tiết Kiệm</h3>
+                <p class="text-gray-600 text-sm mb-4">Cách lập kế hoạch bữa ăn giúp tiết kiệm 30% chi phí...</p>
+                <a href="#" class="text-primary-600 font-semibold hover:text-primary-700">Đọc thêm →</a>
+              </div>
+            </div>
+
+            <!-- Blog Post 2 -->
+            <div class="border rounded-lg overflow-hidden hover:shadow-xl transition">
+              <img src="https://via.placeholder.com/400x250/764ba2/ffffff?text=Healthy+Eating" alt="Blog" class="w-full h-48 object-cover">
+              <div class="p-6">
+                <h3 class="font-bold text-lg mb-2">Thực Đơn Healthy Cho Gia Đình</h3>
+                <p class="text-gray-600 text-sm mb-4">Cân bằng dinh dưỡng mà vẫn ngon miệng...</p>
+                <a href="#" class="text-primary-600 font-semibold hover:text-primary-700">Đọc thêm →</a>
+              </div>
+            </div>
+
+            <!-- Blog Post 3 -->
+            <div class="border rounded-lg overflow-hidden hover:shadow-xl transition">
+              <img src="https://via.placeholder.com/400x250/28a745/ffffff?text=Shopping+Smart" alt="Blog" class="w-full h-48 object-cover">
+              <div class="p-6">
+                <h3 class="font-bold text-lg mb-2">Đi Chợ Thông Minh</h3>
+                <p class="text-gray-600 text-sm mb-4">Bí quyết mua sắm hiệu quả, không lãng phí...</p>
+                <a href="#" class="text-primary-600 font-semibold hover:text-primary-700">Đọc thêm →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK SECTION -->
+    <div id="feedbackSection" class="hidden animate-fade-in">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="fas fa-comment-dots text-primary-500 mr-3"></i>
+            <span data-lang-vi="Góp Ý & Phản Hồi" data-lang-en="Feedback">Góp Ý & Phản Hồi</span>
+          </h2>
+
+          <form id="feedbackForm" class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <span data-lang-vi="Tên của bạn" data-lang-en="Your name">Tên của bạn</span>
+              </label>
+              <input type="text" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:outline-none" placeholder="Nguyễn Văn A">
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <input type="email" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:outline-none" placeholder="email@example.com">
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <span data-lang-vi="Loại góp ý" data-lang-en="Feedback type">Loại góp ý</span>
+              </label>
+              <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:outline-none">
+                <option>Báo lỗi</option>
+                <option>Đề xuất tính năng</option>
+                <option>Góp ý cải thiện</option>
+                <option>Khác</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <span data-lang-vi="Nội dung" data-lang-en="Message">Nội dung</span>
+              </label>
+              <textarea rows="5" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:outline-none" placeholder="Chia sẻ ý kiến của bạn..."></textarea>
+            </div>
+
+            <button type="submit" class="w-full gradient-bg text-white px-8 py-3 rounded-xl font-bold hover:shadow-2xl transition">
+              <i class="fas fa-paper-plane mr-2"></i>
+              <span data-lang-vi="Gửi góp ý" data-lang-en="Submit">Gửi góp ý</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <div id="aboutSection" class="hidden animate-fade-in">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="fas fa-info-circle text-primary-500 mr-3"></i>
+            <span data-lang-vi="Giới Thiệu" data-lang-en="About">Giới Thiệu</span>
+          </h2>
+
+          <div class="prose prose-lg max-w-none">
+            <p class="text-gray-700 leading-relaxed mb-4">
+              <strong>Meal Planner Pro</strong> là ứng dụng web miễn phí giúp gia đình Việt lập kế hoạch bữa ăn và đi chợ thông minh hơn.
+            </p>
+
+            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">✨ Tính năng</h3>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+              <li>Lập thực đơn tự động hoặc tự chọn món</li>
+              <li>Tính toán nguyên liệu và giá cả chính xác</li>
+              <li>Danh sách mua hàng phân loại chi tiết</li>
+              <li>50+ món ăn Việt Nam</li>
+              <li>Xuất file Excel để in hoặc chia sẻ</li>
+            </ul>
+
+            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">🎯 Mục tiêu</h3>
+            <p class="text-gray-700 leading-relaxed">
+              Giúp các gia đình tiết kiệm thời gian, chi phí và có bữa ăn cân bằng dinh dưỡng hơn.
+            </p>
+
+            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">📞 Liên hệ</h3>
+            <p class="text-gray-700 leading-relaxed">
+              Email: <a href="mailto:support@mealplanner.vn" class="text-primary-600 hover:text-primary-700">support@mealplanner.vn</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-16 py-8 bg-white/70 backdrop-blur-sm border-t border-gray-200">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+      <p class="font-medium">🍽️ Meal Planner Pro - Ứng dụng lập thực đơn thông minh</p>
+      <p class="text-sm mt-2">Made with ❤️ for Vietnamese families | Version 3.0</p>
+      <div class="mt-4 space-x-4">
+        <a href="#" class="hover:text-primary-600"><i class="fab fa-facebook text-xl"></i></a>
+        <a href="#" class="hover:text-primary-600"><i class="fab fa-twitter text-xl"></i></a>
+        <a href="#" class="hover:text-primary-600"><i class="fab fa-instagram text-xl"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="utils-updated.js"></script>
+  <script src="data.js"></script>
+  <script src="app-pro.js"></script>
+
+  <script>
+    // Navigation & Language Functions
+    let currentLanguage = 'vi';
+    let darkMode = false;
+
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      darkMode = !darkMode;
+      document.body.classList.toggle('dark-mode');
+
+      // Update icons and text
+      const icon = document.getElementById('darkModeIcon');
+      const text = document.getElementById('darkModeText');
+      const iconMobile = document.getElementById('darkModeIconMobile');
+      const textMobile = document.getElementById('darkModeTextMobile');
+
+      if (darkMode) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        text.textContent = 'Sáng';
+        iconMobile.classList.remove('fa-moon');
+        iconMobile.classList.add('fa-sun');
+        textMobile.textContent = 'Chế độ sáng';
+        localStorage.setItem('darkMode', 'true');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        text.textContent = 'Tối';
+        iconMobile.classList.remove('fa-sun');
+        iconMobile.classList.add('fa-moon');
+        textMobile.textContent = 'Chế độ tối';
+        localStorage.setItem('darkMode', 'false');
+      }
+    }
+
+    // Load dark mode preference on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedDarkMode = localStorage.getItem('darkMode');
+      if (savedDarkMode === 'true') {
+        toggleDarkMode();
+      }
+    });
+
+    function showSection(section) {
+      // Hide all sections
+      document.getElementById('homeSection').classList.add('hidden');
+      document.getElementById('blogSection').classList.add('hidden');
+      document.getElementById('feedbackSection').classList.add('hidden');
+      document.getElementById('aboutSection').classList.add('hidden');
+
+      // Show selected section
+      document.getElementById(section + 'Section').classList.remove('hidden');
+      document.getElementById(section + 'Section').classList.add('animate-fade-in');
+
+      // If returning to home, reset to step 1
+      if (section === 'home' && typeof goToStep === 'function') {
+        goToStep(1);
+      }
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+    function switchLanguage(lang) {
+      currentLanguage = lang;
+      document.getElementById('currentLang').textContent = lang === 'vi' ? 'Tiếng Việt' : 'English';
+
+      // Update all elements with data-lang attributes
+      document.querySelectorAll('[data-lang-vi]').forEach(el => {
+        if (lang === 'vi') {
+          el.textContent = el.dataset.langVi;
+        } else {
+          el.textContent = el.dataset.langEn || el.dataset.langVi;
+        }
+      });
+
+      // Update day buttons
+      document.querySelectorAll('.days-btn').forEach(btn => {
+        if (lang === 'vi') {
+          btn.textContent = btn.dataset.labelVi;
+        } else {
+          btn.textContent = btn.dataset.labelEn || btn.dataset.labelVi;
+        }
+      });
+
+      // Close dropdown/mobile menu
+      toggleMobileMenu();
+    }
+
+    // Feedback form submission
+    document.getElementById('feedbackForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert(currentLanguage === 'vi' ? 'Cảm ơn bạn đã góp ý!' : 'Thank you for your feedback!');
+      this.reset();
+    });
+  </script>
+</body>
+</html>

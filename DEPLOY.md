@@ -236,7 +236,7 @@ vercel rollback
 
 ### App Support
 - Issues: GitHub Issues
-- Email: support@mealplanner.vn (placeholder)
+- Email: phanminhhuept@gmail.com
 
 ---
 

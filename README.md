@@ -342,7 +342,7 @@ Nếu bạn muốn đóng góp:
 🔧 [README-FINAL.md](README-FINAL.md) - Technical docs
 
 ### Liên hệ
-📧 Email: support@mealplanner.vn (placeholder)
+📧 Email: phanminhhuept@gmail.com
 💬 Góp ý: Dùng form trong app
 
 ---

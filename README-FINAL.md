@@ -432,7 +432,7 @@ Cà chua:         18,000đ  ⬇️ từ 20,000đ
 4. Góp ý qua form
 
 **Liên hệ:**
-- Email: support@mealplanner.vn
+- Email: phanminhhuept@gmail.com
 - Form góp ý trong app
 
 ---

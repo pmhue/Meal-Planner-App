@@ -827,10 +827,29 @@ function generateShoppingList() {
 
     if (priceInfo) {
       let amount = ingredient.amount;
+
+      // Convert units to match price database
       if (ingredient.unit === 'g' && priceInfo.unit === 'kg') {
         amount = amount / 1000;
+      } else if (ingredient.unit === 'củ' && priceInfo.unit === 'kg') {
+        amount = amount * 0.15; // 1 củ ≈ 150g
+      } else if (ingredient.unit === 'quả' && priceInfo.unit === 'kg') {
+        amount = amount * 0.1; // 1 quả ≈ 100g
+      } else if (ingredient.unit === 'tép' && priceInfo.unit === 'kg') {
+        amount = amount * 0.005; // 1 tép ≈ 5g
+      } else if (ingredient.unit === 'ml' && priceInfo.unit === 'lít') {
+        amount = amount / 1000;
+      } else if (ingredient.unit === 'muỗng') {
+        // Gia vị - giá nhỏ, có thể bỏ qua hoặc tính ước lượng
+        itemPrice = 0;
+      } else if (ingredient.unit !== priceInfo.unit) {
+        // Đơn vị không khớp - bỏ qua
+        itemPrice = 0;
       }
-      itemPrice = amount * priceInfo.price;
+
+      if (itemPrice !== 0) {
+        itemPrice = amount * priceInfo.price;
+      }
     }
 
     const itemWithPrice = { ...ingredient, estimatedPrice: itemPrice };
@@ -854,9 +873,29 @@ function calculateDishPrice(dish) {
     const priceInfo = priceDatabase[ing.name];
     if (priceInfo) {
       let amount = ing.amount * multiplier;
+
+      // Convert units to match price database
       if (ing.unit === 'g' && priceInfo.unit === 'kg') {
         amount = amount / 1000;
+      } else if (ing.unit === 'củ' && priceInfo.unit === 'kg') {
+        // 1 củ ≈ 150-200g tùy loại, trung bình 0.15kg
+        amount = amount * 0.15;
+      } else if (ing.unit === 'quả' && priceInfo.unit === 'kg') {
+        // 1 quả trung bình 0.1kg
+        amount = amount * 0.1;
+      } else if (ing.unit === 'tép' && priceInfo.unit === 'kg') {
+        // 1 tép tỏi ≈ 5g
+        amount = amount * 0.005;
+      } else if (ing.unit === 'muỗng') {
+        // Gia vị đơn vị muỗng - giá rất nhỏ, bỏ qua
+        return;
+      } else if (ing.unit === 'ml' && priceInfo.unit === 'lít') {
+        amount = amount / 1000;
+      } else if (ing.unit !== priceInfo.unit) {
+        // Nếu đơn vị không khớp và không xử lý được, bỏ qua
+        return;
       }
+
       total += amount * priceInfo.price;
     }
   });

@@ -149,6 +149,61 @@
       color: inherit !important;
       filter: brightness(1.3);
     }
+
+    /* Dark Mode - Hiệu ứng hover và active */
+    body.dark-mode button:hover,
+    body.dark-mode .people-btn:hover,
+    body.dark-mode .days-btn:hover,
+    body.dark-mode .mode-btn:hover {
+      background-color: #4a5568 !important;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .people-btn:active,
+    body.dark-mode .days-btn:active,
+    body.dark-mode .mode-btn:active {
+      background-color: #5a6578 !important;
+      transform: scale(0.98);
+    }
+
+    /* Border sáng khi được chọn */
+    body.dark-mode .border-primary-500,
+    body.dark-mode button.border-primary-500 {
+      border-color: #667eea !important;
+      background-color: #4a5568 !important;
+      box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+    }
+
+    body.dark-mode .bg-primary-50 {
+      background-color: #4a5568 !important;
+    }
+
+    /* Hiệu ứng cho card khi hover */
+    body.dark-mode .hover-scale:hover {
+      background-color: #3d4556 !important;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Hiệu ứng cho tab khi active */
+    body.dark-mode .tab-btn.border-primary-500 {
+      border-color: #667eea !important;
+      color: #93c5fd !important;
+      background-color: rgba(102, 126, 234, 0.2) !important;
+    }
+
+    body.dark-mode .tab-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    /* Hiệu ứng cho mode buttons */
+    body.dark-mode .mode-btn.gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    }
+
+    body.dark-mode .mode-btn.gradient-bg:hover {
+      box-shadow: 0 0 30px rgba(102, 126, 234, 0.6) !important;
+    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen font-sans">

@@ -1,0 +1,23 @@
+{
+  "name": "meal-planner-pro",
+  "version": "3.5.0",
+  "description": "Ứng dụng lập thực đơn và đi chợ thông minh cho gia đình Việt",
+  "main": "index-final.html",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve ."
+  },
+  "keywords": [
+    "meal-planner",
+    "shopping-list",
+    "vietnamese-food",
+    "grocery",
+    "budget"
+  ],
+  "author": "Meal Planner Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/meal-planner-pro"
+  }
+}

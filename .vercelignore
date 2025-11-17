@@ -1,0 +1,14 @@
+# Documentation files
+*.md
+!README.md
+
+# Backup files
+index-pro.html
+
+# IDE files
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db

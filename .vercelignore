@@ -2,9 +2,6 @@
 *.md
 !README.md
 
-# Backup files
-index-pro.html
-
 # IDE files
 .vscode/
 .idea/

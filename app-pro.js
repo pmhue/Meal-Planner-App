@@ -13,10 +13,10 @@ const appState = {
   dayPlans: {} // For 'byday' mode: {1: {breakfast: [], lunch: [], dinner: []}}
 };
 
-// Serving Multipliers
+// Serving Multipliers (điều chỉnh để giá cả hợp lý hơn)
 const servingMultipliers = {
-  1: 0.5, 2: 0.7, 3: 1.0, 4: 1.2,
-  5: 1.5, 6: 1.8, 7: 2.0, 8: 2.2
+  1: 0.4, 2: 0.6, 3: 0.8, 4: 1.0,
+  5: 1.1, 6: 1.3, 7: 1.5, 8: 1.7
 };
 
 // Icons

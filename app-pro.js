@@ -906,20 +906,35 @@ function calculateDishPrice(dish) {
 function calculateTotals() {
   let totalDishes = 0;
   let totalItems = 0;
+  let totalCost = 0;
 
+  // Tính tổng giá từ mealPlan
   appState.mealPlan.forEach(day => {
-    if (day.breakfast) totalDishes++;
-    totalDishes += day.lunch.length + day.dinner.length;
+    if (day.breakfast) {
+      totalDishes++;
+      totalCost += calculateDishPrice(day.breakfast);
+    }
+    day.lunch.forEach(dish => {
+      totalDishes++;
+      totalCost += calculateDishPrice(dish);
+    });
+    day.dinner.forEach(dish => {
+      totalDishes++;
+      totalCost += calculateDishPrice(dish);
+    });
   });
 
   Object.values(appState.shoppingList).forEach(items => {
     totalItems += items.length;
   });
 
-  document.getElementById('totalCost').textContent = formatCurrency(appState.totalPrice);
+  // Cập nhật appState.totalPrice
+  appState.totalPrice = totalCost;
+
+  document.getElementById('totalCost').textContent = formatCurrency(totalCost);
   document.getElementById('totalDishes').textContent = totalDishes;
   document.getElementById('totalItems').textContent = totalItems;
-  document.getElementById('avgCostPerDay').textContent = formatCurrency(appState.totalPrice / appState.numberOfDays);
+  document.getElementById('avgCostPerDay').textContent = formatCurrency(totalCost / appState.numberOfDays);
 }
 
 // ========== RENDER RESULTS ==========
